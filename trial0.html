@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitFussion - Human & Pet Fitness</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --card-bg: #f5f5f5;
+      --primary-color: #2c3e50;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --text-color: #f1f1f1;
+      --card-bg: #1e1e1e;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items:end;
+      background-color: var(--primary-color);
+      padding: 190px 200px;
+      color: white;
+      background-image: url('template1.jpg'); 
+      background-size: cover;
+      background-position: center;
+    }
+
+    header a, nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: var(--primary-color);
+      padding: 10px 20px;
+    }
+    .search-bar {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input[type="text"] {
+  padding: 6px 10px;
+  border-radius: 5px 0 0px 5px;
+  border: none;
+  outline: none;
+  font-size: 0.9em;
+}
+
+.search-bar button {
+  padding: 6px 10px;
+  border: none;
+  background-color: #ff4081;
+  color: white;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: #e03070;
+}
+
+
+    .dropdown {
+      position: relative;
+      margin-right: 20px;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      min-width: 220px;
+      grid-template-columns: 1fr;
+    }
+    .dropdown-content a {
+    color: #000000;
+}
+
+    .dropdown:hover .dropdown-content {
+      display: grid;
+      
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      background-color: var(--card-bg);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #34495e;
+    }
+
+    .theme-toggle {
+      cursor: pointer;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .active-section {
+      display: block;
+    }
+
+    .signup-form, .cart, .track-order {
+      background: var(--card-bg);
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+.banner-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(to right, #fdd, #ddf);
+  overflow: hidden;
+}
+
+.banner-container img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.9;
+}
+
+
+
+.banner-text {
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  color: #fff;
+}
+
+.banner-text h2 {
+  font-size: 2em;
+  margin: 0;
+}
+
+.banner-text p {
+  font-size: 1.2em;
+}
+
+.shop-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #ff4081;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+}
+  </style>
+</head>
+<body>
+  <div style="display: flex; justify-content: flex-end; gap: 15px; font-size: 0.95rem; background-color: var(--primary-color); padding: 10px 20px;">
+    <a href="#" onclick="showSection('track-order')" style="color: white;"><i class="fas fa-shipping-fast"></i> Track Order</a>
+    <a href="#" onclick="showSection('cart')" style="color: white;"><i class="fas fa-shopping-cart"></i> Cart</a>
+    <a href="#" onclick="showSection('signup')" style="color: white;"><i class="fas fa-user-plus"></i> Sign Up</a>
+    <span class="theme-toggle" onclick="toggleTheme()" style="cursor: pointer; color: white;"><i class="fas fa-adjust"></i> Theme</span>
+  </div>
+  <header>
+    <div style="display: flex; align-items: center; gap: 10px; background-color: rgba(0,0,0,0.6); padding: 10px; border-radius: 10px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="FitFussion Logo" style="width: 50px; height: 50px;">
+      <strong style="font-size: 1.8rem; letter-spacing: 1px; color: #fff;">FitFussion</strong> 
+    </div>
+  </header>
+
+  <nav>
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('about-us')">About Us</a>
+    <a href="#" onclick="showSection('best-sellers')">Best Sellers</a>
+    <a href="#" onclick="showSection('new-arrivals')">New Arrivals</a>
+    
+    <div class="dropdown">
+      <a href="#">Human Fitness</a>
+      <div class="dropdown-content">
+        <a href="#" data-category="fitness-equipment">Fitness Equipment</a>
+        <a href="#" data-category="active-wears">Active Wears</a>
+        <a href="#" data-category="nutrition">Nutrition & Supplements</a>
+        <a href="#" data-category="tech">Fitness Trackers & Tech</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <a href="#">Pet Fitness</a>
+      <div class="dropdown-content">
+        <a href="#" data-category="exercise-gears">Exercise Gears</a>
+        <a href="#" data-category="enrichment">Toy & Enrichment</a>
+        <a href="#" data-category="pet-apparel">Pet Apparel</a>
+        <a href="#" data-category="pet-trackers">Fitness Trackers for Pets</a>
+      </div>
+    </div>
+
+    <div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search products...">
+  <button onclick="searchProducts()"><i class="fas fa-search"></i></button>
+</div>
+
+  </nav>
+   <div class="banner-container">
+    <img id="product-img" src="https://i.pinimg.com/736x/0a/e1/d2/0ae1d2909e3c515d5af4dbc956a963ec.jpg" alt="Product Image">
+    <div class="banner-text">
+      <h2 id="discount-text">25% OFF</h2>
+      <p id="product-name">Protein Supplement</p>
+      <button class="shop-btn">SHOP NOW</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="best-sellers" class="section active-section">
+        
+      <h2>Best Sellers Products</h2>
+      <div class="product-grid">
+        <div class="product">
+          <img src="https://i.pinimg.com/736x/a1/79/87/a17987af861b714b0194a817f38f4abf.jpg" alt="Fitness Treadmill" style="width:185px;height: 200px;">
+          <h4>Fitness Treadmill</h4>
+          <p>For Home Workouts</p>
+          <button onclick="addToCart('Fitness Treadmill')">Add to Cart</button>
+        </div>
+        <div class="product">
+          <img src="https://i.pinimg.com/736x/3b/53/97/3b5397d16c2540b2f0d40ac0a0936ae8.jpg" alt="Speediance Gym Monster" style="width:185px;height: 200px;">
+            <h4>Speediance Gym Monster</h4>
+            <p>For Home Workouts</p>
+            <button onclick="addToCart('Speediance Gym Monster')">Add to Cart</button>
+        </div>
+        <div class="product">
+          <img src="https://i.pinimg.com/736x/ef/c2/27/efc22793b8be0b692765bcda12445452.jpg" alt="Oura Ring 4" style="width: 185px;height: 200px;">
+            <h4>Oura Ring 4 </h4>
+            <p>Health Tracker</p>
+            <button onclick="addToCart('Oura Ring 4')">Add to Cart</button>
+        </div>
+        <div class="product">
+          <img src="https://i.pinimg.com/736x/4a/27/7b/4a277b13197229fbb8ff70dbc469b89e.jpg" alt="Protein Supplements" style="width:185px;height: 200px;">
+          <h4>Protein Supplements</h4>
+          <p>For Muscle Recovery</p>
+          <button onclick="addToCart('Protein Supplements')">Add to Cart</button>
+        </div>
+        <div class="product">
+          <img src="https://i.pinimg.com/736x/24/46/7b/24467bf26aad5ae083564a3c0fd75c38.jpg" alt="Pet Dumbbell Toy" style="width:185px;height: 200px;">
+          <h4>Pet Dumbbell Toy</h4>
+          <p>For Pet Exercise</p>
+          <button onclick="addToCart('Pet Dumbbell Toy')">Add to Cart</button>
+        </div>
+        <div class="product">
+          <img src="https://i.pinimg.com/736x/ca/27/e2/ca27e2aec7e69ebe8286a50e87b609fa.jpg" alt="Cat Tree" style="width:185px;height: 200px;">
+        <h4>Cat Tree </h4>
+        <p>For Pet Exercise</p>
+        <button onclick="addToCart('Cat Tree')">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="https://i.pinimg.com/736x/ab/39/d4/ab39d49017fa07a6e95a3dcd00a4b555.jpg" alt="Smart Dog Collar" style="width:185px;height: 200px;">
+        <h4>Smart Dog Collar </h4>
+        <p>For keeping Pets under Control</p>
+        <button onclick="addToCart('Smart Dog Collar')">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="https://i.pinimg.com/736x/2b/42/91/2b4291f1698b1d8390492d1d6da70538.jpg" alt="Cat Water Fountain" style="width:185px;height: 200px;">
+        <h4>Cat Water Fountain</h4>
+        <p>For Pet Utensils</p>
+        <button onclick="addToCart('Cat Water Fountain')">Add to Cart</button>
+      </div>
+    </div>
+    </div>
+    <div class="container">
+        <div id="new-arrivals" class="section active-section">
+          <h2>New Arrival Products</h2>
+          <div class="product-grid">
+           <div class="product">
+          <img src="https://i.pinimg.com/736x/cc/58/76/cc58765cd454c88d06adb81872ca851f.jpg" alt="Dog Paw Cleaner" style="width:200px;height:auto;">
+          <h4>Dog Paw Cleaner</h4>
+          <p>For Pet Cleaner</p>
+           <button onclick="addToCart('Dog Paw Cleaner')">Add to Cart</button>
+           </div>
+
+            <div class="product">
+              <img src="https://i.pinimg.com/736x/3b/0b/e2/3b0be28d70db63a0ff78a20cacab904b.jpg" alt="Pet Carrier Bag" style="width:200px;height: 200px;">
+                <h4>Pet Carrier Bag </h4>
+                <p>For Pet Carrier</p>
+                <button onclick="addToCart(' Pet Carrier Bag ')">Add to Cart</button>
+            </div>
+            <div class="product">
+              <img src="https://th.bing.com/th/id/OIP.0J9MDE0GjUjfABNUZtBeBwHaHa?cb=iwp2&rs=1&pid=ImgDetMain" alt="Super Scoope" style="width:200px;height: 200px;">
+                <h4>Super Scoope </h4>
+                <p>For Pet Food</p>
+                <button onclick="addToCart('Super Scoope')">Add to Cart</button>
+            </div>
+            <div class="product">
+              <img src="https://i.pinimg.com/736x/2b/94/bc/2b94bcfe0540c087ce4c557058467f30.jpg" alt="Protein Supplements for pet" style="width:200px;height: 200px;">
+              <h4>Protein Supplements for pet</h4>
+              <p>For weight gain </p>
+              <button onclick="addToCart('Protein Supplements for pet')">Add to Cart</button>
+            </div>
+            <div class="product">
+              <img src="https://i.pinimg.com/736x/c3/ff/92/c3ff92ae03f0160446f6fca14b0991b2.jpg" alt="Cat Toys" style="width:200px;height: 200px;">
+              <h4>Cat Toys</h4>
+              <p>For Pet Exercise</p>
+              <button onclick="addToCart('Cat Toys')">Add to Cart</button>
+            </div>
+            <div class="product">
+              <img src="https://i.pinimg.com/736x/84/74/ce/8474ce2a1da7574269ed58120b5b8a63.jpg" alt="Cat Foods " style="width:200px;height: 200px;">
+            <h4>Cat Foods </h4>
+            <p>Healthy Supplements for cats</p>
+            <button onclick="addToCart('Cat Foods ')">Add to Cart</button>
+          </div>
+          <div class="product">
+            <img src="https://i.pinimg.com/736x/0a/e1/d2/0ae1d2909e3c515d5af4dbc956a963ec.jpg" alt="Dog Food" style="width:200px;height: 200px;">
+            <h4>Dog Food </h4>
+            <p>Healthy Supplements for dogs</p>
+            <button onclick="addToCart('Dog Food')">Add to Cart</button>
+          </div>
+          <div class="product">
+            <img src="https://i.pinimg.com/736x/c7/43/44/c743449e2a37f92b9920410d8467d93a.jpg" alt="Cat Water Fountain" style="width:200px;height: 200px;">
+            <h4>Cat Water Fountain</h4>
+            <p>For Pet Utensils</p>
+            <button onclick="addToCart('Cat Water Fountain')">Add to Cart</button>
+          </div>
+        </div>
+        </div>
+
+<section id="about-us" class="section" style="background-color: var(--card-bg); padding: 40px 20px; border-radius: 10px; margin-top: 20px;">
+  <h2 style="text-align: center; color: var(--text-color);">About Us</h2>
+  <p style="max-width: 800px; margin: 20px auto; font-size: 1.1em; line-height: 1.6; color: var(--text-color);">
+    At <strong>FitFussion</strong>, we believe fitness is a journey best shared—with those on two legs or four. 
+    We’re a lifestyle brand committed to promoting health, wellness, and active living for both humans and their furry companions.
+  </p>
+  <p style="max-width: 800px; margin: 0 auto 20px auto; font-size: 1.1em; line-height: 1.6; color: var(--text-color);">
+    Built on the idea that well-being knows no species, we bridge the gap between human and pet fitness. 
+    From workout gear and activewear to pet exercise tools and wellness tech, our curated range empowers every member of the family to live a vibrant, energetic life.
+  </p>
+  <p style="max-width: 800px; margin: 0 auto; font-weight: bold; font-size: 1.1em; text-align: center; color: var(--text-color);">
+    Our mission is simple: To help pets and their people thrive together—staying active, healthy, and connected every step of the way.
+  </p>
+</section>
+
+    <div id="cart" class="cart section">
+      <h2>Your Cart</h2>
+      <ul id="cart-items"></ul>
+    </div>
+
+    <div id="track-order" class="track-order section">
+      <h2>Track Your Order</h2>
+      <input type="text" placeholder="Enter Order ID" />
+      <button>Track</button>
+    </div>
+
+    <div id="signup" class="signup-form section">
+  <h2>Sign Up</h2>
+  <form id="signup-form">
+    <input type="text" id="name" placeholder="Name" required /><br />
+    <input type="email" id="email" placeholder="Email" required /><br />
+    <input type="password" id="password" placeholder="Password" required /><br />
+    <button type="submit">Register</button>
+  </form>
+  <p id="signup-message" style="color: green; margin-top: 10px;"></p>
+</div>
+
+ <script>
+  
+  function searchProducts() {
+    const query = document.getElementById("searchInput").value.toLowerCase();
+    const products = document.querySelectorAll(".product");
+    products.forEach(product => {
+      const name = product.querySelector("h4").textContent.toLowerCase();
+      if (name.includes(query)) {
+        product.style.display = "block";
+      } else {
+        product.style.display = "none";
+      }
+    });
+
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+    document.getElementById('best-sellers').classList.add('active-section');
+  }
+
+ function showSection(id) {
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active-section');
+  });
+
+  if (id === "home") {
+    document.getElementById('best-sellers').classList.add('active-section');
+    document.getElementById('new-arrivals').classList.add('active-section');
+  } else {
+    document.getElementById(id).classList.add('active-section');
+  }
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute("data-theme");
+  if (currentTheme === "dark") {
+    document.documentElement.removeAttribute("data-theme");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+}
+
+function addToCart(productName) {
+  const li = document.createElement('li');
+  li.textContent = productName;
+  document.getElementById('cart-items').appendChild(li);
+  showSection('cart');
+}
+
+const offers = [
+  {
+    img: "https://i.pinimg.com/736x/0a/e1/d2/0ae1d2909e3c515d5af4dbc956a963ec.jpg",
+    discount: "25% OFF",
+    name: "Smart Dog Collar"
+  },
+  {
+    img: "https://i.pinimg.com/736x/23/1e/29/231e29beac7833dcee85e4dc2e04e23b.jpg",
+    discount: "15% OFF",
+    name: "Treadmill Machine"
+  },
+  {
+    img: "https://i.pinimg.com/736x/a1/79/87/a17987af861b714b0194a817f38f4abf.jpg",
+    discount: "30% OFF",
+    name: "Protein Supplement"
+  }
+];
+let index = 0;
+
+function updateBanner() {
+  $("#product-img").fadeOut(300, function () {
+    $("#product-img").attr("src", offers[index].img).fadeIn(300);
+  });
+  $("#discount-text").text(offers[index].discount);
+  $("#product-name").text(offers[index].name);
+  index = (index + 1) % offers.length;
+}
+
+updateBanner();
+setInterval(updateBanner, 4000);
+document.getElementById("signup-form").addEventListener("submit", function (e) {
+    e.preventDefault(); 
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (name === "" || email === "" || password === "") {
+      document.getElementById("signup-message").style.color = "red";
+      document.getElementById("signup-message").innerText = "All fields are required!";
+      return;
+    }
+    const user = { name, email, password };
+    localStorage.setItem("fitfussion-user", JSON.stringify(user));
+
+    document.getElementById("signup-message").style.color = "green";
+    document.getElementById("signup-message").innerText = "Registration successful!";
+    document.getElementById("signup-form").reset();
+  });
+
+  </script>
+</body>
+</html>
+
